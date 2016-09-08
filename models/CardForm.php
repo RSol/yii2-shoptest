@@ -9,9 +9,8 @@
 namespace app\models;
 
 
+use app\components\Card;
 use yii\base\Model;
-use yii\db\Query;
-use yii\helpers\Json;
 
 class CardForm extends Model
 {
@@ -52,46 +51,11 @@ class CardForm extends Model
             return false;
         }
 
-        $card = static::getCard();
-        if (array_key_exists($this->item, $card)) {
-            $card[$this->item] += $this->count;
-        } else {
-            $card[$this->item] = $this->count;
-        }
-
-        $key = 'userCard';
-        $session = \Yii::$app->session;
-        $session->set($key, Json::encode($card));
+        Card::addCardItem($this->item, $this->count);
 
         return true;
     }
 
-    /**
-     * Delete item from card
-     * @param $id
-     */
-    public static function deleteCardItem($id)
-    {
-        $card = static::getCard();
-        if (array_key_exists($id, $card)) {
-            unset($card[$id]);
-
-            $key = 'userCard';
-            $session = \Yii::$app->session;
-            $session->set($key, Json::encode($card));
-        }
-    }
-
-    /**
-     * Card content
-     * @return array [itemId => count]
-     */
-    public static function getCard()
-    {
-        $key = 'userCard';
-        $session = \Yii::$app->session;
-        return Json::decode($session->get($key, '{}'));
-    }
 
     /**
      * @return Items

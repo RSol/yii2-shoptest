@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Card;
 use app\widgets\CardWidget;
 use Yii;
 use app\models\CardForm;
@@ -75,7 +76,7 @@ class SiteController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        CardForm::deleteCardItem($id);
+        Card::deleteCardItem($id);
         return [
             'success' => true,
             'result' => CardWidget::widget(),

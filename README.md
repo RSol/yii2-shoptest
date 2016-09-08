@@ -1,192 +1,63 @@
-Yii 2 Basic Project Template
+Shop test task
 ============================
 
-Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for
-rapidly creating small projects.
+##Install
 
-The template contains the basic features including user login/logout and a contact page.
-It includes all commonly used configurations that would allow you to focus on adding new
-features to your application.
+    makedir <dirname>
+    cd <dirname>
+    git clone https://github.com/RSol/yii2-shoptest.git .
+    composer install
 
-[![Latest Stable Version](https://poser.pugx.org/yiisoft/yii2-app-basic/v/stable.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Total Downloads](https://poser.pugx.org/yiisoft/yii2-app-basic/downloads.png)](https://packagist.org/packages/yiisoft/yii2-app-basic)
-[![Build Status](https://travis-ci.org/yiisoft/yii2-app-basic.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-basic)
+##Create DB
 
-DIRECTORY STRUCTURE
--------------------
+In DBServer (MySql) create DB. Example: `yii2_tbb`
+    
+##Configure DB connection
 
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
+Copy file `config/db.sample.php` to `config/db.php` and change connection settings 
 
-
-
-REQUIREMENTS
-------------
-
-The minimum requirement by this project template that your Web server supports PHP 5.4.0.
-
-
-INSTALLATION
-------------
-
-### Install via Composer
-
-If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-You can then install this project template using the following command:
-
-~~~
-php composer.phar global require "fxp/composer-asset-plugin:^1.2.0"
-php composer.phar create-project --prefer-dist --stability=dev yiisoft/yii2-app-basic basic
-~~~
-
-Now you should be able to access the application through the following URL, assuming `basic` is the directory
-directly under the Web root.
-
-~~~
-http://localhost/basic/web/
-~~~
-
-
-### Install from an Archive File
-
-Extract the archive file downloaded from [yiiframework.com](http://www.yiiframework.com/download/) to
-a directory named `basic` that is directly under the Web root.
-
-Set cookie validation key in `config/web.php` file to some random secret string:
-
-```php
-'request' => [
-    // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-    'cookieValidationKey' => '<secret random string goes here>',
-],
-```
-
-You can then access the application through the following URL:
-
-~~~
-http://localhost/basic/web/
-~~~
-
-
-CONFIGURATION
--------------
-
-### Database
-
-Edit the file `config/db.php` with real data, for example:
-
-```php
-return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '1234',
-    'charset' => 'utf8',
-];
-```
+    'dsn' => 'mysql:host=localhost;dbname=yii2_tbb',
+    'username' => 'username',
+    'password' => 'password',
+    'charset' => 'utf8',    
 
-**NOTES:**
-- Yii won't create the database for you, this has to be done manually before you can access it.
-- Check and edit the other files in the `config/` directory to customize your application as required.
-- Refer to the README in the `tests` directory for information specific to basic application tests.
+##Run migrations
 
+    php yii migrate
+    
+    
+##Configure your server 
 
-
-TESTING
--------
-
-Tests are located in `tests` directory. They are developed with [Codeception PHP Testing Framework](http://codeception.com/).
-By default there are 3 test suites:
-
-- `unit`
-- `functional`
-- `acceptance`
-
-Tests can be executed by running
-
-```
-composer exec codecept run
-``` 
-
-The command above will execute unit and functional tests. Unit tests are testing the system components, while functional
-tests are for testing user interaction. Acceptance tests are disabled by default as they require additional setup since
-they perform testing in real browser. 
+See http://www.yiiframework.com/doc-2.0/guide-start-installation.html#configuring-web-servers
 
 
-### Running  acceptance tests
+###Заметки по заданию 
 
-To execute acceptance tests do the following:  
-
-1. Rename `tests/acceptance.suite.yml.example` to `tests/acceptance.suite.yml` to enable suite configuration
-
-2. Replace `codeception/base` package in `composer.json` with `codeception/codeception` to install full featured
-   version of Codeception
-
-3. Update dependencies with Composer 
-
-    ```
-    composer update  
-    ```
-
-4. Download [Selenium Server](http://www.seleniumhq.org/download/) and launch it:
-
-    ```
-    java -jar ~/selenium-server-standalone-x.xx.x.jar
-    ``` 
-
-5. (Optional) Create `yii2_basic_tests` database and update it by applying migrations if you have them.
-
-   ```
-   tests/bin/yii migrate
-   ```
-
-   The database configuration can be found at `config/test_db.php`.
+* Только товары хранятся в базе. Принял решение, что корзину лучше хранить в сессии.
+* Акции реализованы каждая своим классом, но используются через компонент `\Yii::$app->actions`, конфигурация в конфиге `config/web.php`:
 
 
-6. Start web server:
+    'components' => [
+        ...
+        'actions' => [
+            'class' => '\app\components\actions\Action',
+            'firstStop' => false,
+            'actions' => [
+                [
+                    'class' => '\app\components\actions\First',
+                    'name' => 'Первая акция',
+                ],
+                [
+                    'class' => '\app\components\actions\Second',
+                    'name' => 'Вторая акция',
+                ],
+            ],
+        ],
+        ...
 
-    ```
-    tests/bin/yii serve
-    ```
+параметр настроки компонента `firstStop` указывает на необходимость остановки после нахождения первой подходящей акции (по умолчанию `true` - остановка после первой найденой акции).
+Акции объявленные выше имеют высший приоритет. Т.е. в данном случае сначала применится "Первая акция" и если она применима и параметр  `firstStop == true`, остальные акции применяться не будут, если `firstStop == false`, то применится акция и дальше проверятся следующая акция с измененной ценой
 
-7. Now you can run all available tests
 
-   ```
-   # run all available tests
-   composer exec codecept run
-
-   # run acceptance tests
-   composer exec codecept run acceptance
-
-   # run only unit and functional tests
-   composer exec codecept run unit,functional
-   ```
-
-### Code coverage support
-
-By default, code coverage is disabled in `codeception.yml` configuration file, you should uncomment needed rows to be able
-to collect code coverage. You can run your tests and collect coverage with the following command:
-
-```
-#collect coverage for all tests
-composer exec codecept run -- --coverage-html --coverage-xml
-
-#collect coverage only for unit tests
-composer exec codecept run unit -- --coverage-html --coverage-xml
-
-#collect coverage for unit and functional tests
-composer exec codecept run functional,unit -- --coverage-html --coverage-xml
-```
-
-You can see code coverage output under the `tests/_output` directory.
+* весь JS код размещен в `web/js/card.js` и подключается через `assets/CardAsset.php`

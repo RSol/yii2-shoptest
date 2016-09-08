@@ -14,7 +14,7 @@ $config = [
         ],
         'actions' => [
             'class' => '\app\components\actions\Action',
-            'firstStop' => false,
+            'firstStop' => true,
             'actions' => [
                 [
                     'class' => '\app\components\actions\First',

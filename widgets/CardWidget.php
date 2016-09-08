@@ -4,7 +4,7 @@
 namespace app\widgets;
 
 
-use app\models\CardForm;
+use app\components\Card;
 use app\models\Items;
 use yii\base\Widget;
 use yii\data\ActiveDataProvider;
@@ -13,7 +13,7 @@ class CardWidget extends Widget
 {
     public function run()
     {
-        $items = CardForm::getCard();
+        $items = Card::getCard();
         $dataProvider = new ActiveDataProvider([
             'query' => Items::find()->where(['in', 'id', array_keys($items)])->orderBy('title'),
             'pagination' => [

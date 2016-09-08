@@ -5,7 +5,7 @@ namespace app\widgets;
 
 
 use app\components\actions\Action;
-use app\models\CardForm;
+use app\components\Card;
 use app\models\Items;
 use yii\base\Widget;
 
@@ -24,7 +24,7 @@ class PriceWidget extends Widget
     public function init()
     {
         if (!$this->items) {
-            $this->items = CardForm::getCard();
+            $this->items = Card::getCard();
         }
 
         if (!$this->models) {
