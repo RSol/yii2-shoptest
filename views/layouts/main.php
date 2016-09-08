@@ -24,10 +24,12 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
+<div id="load-screen"></div>
+
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Интернет магазин!',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -36,8 +38,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Items', 'url' => ['/items/index']],
+            ['label' => 'Магазин', 'url' => ['/site/index']],
+            ['label' => 'Товары', 'url' => ['/items/index']],
         ],
     ]);
     NavBar::end();

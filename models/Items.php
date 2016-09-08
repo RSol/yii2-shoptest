@@ -39,8 +39,26 @@ class Items extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'price' => 'Price',
+            'title' => 'Название',
+            'price' => 'Цена',
         ];
+    }
+
+    /**
+     * @param string $q
+     * @param int $limit
+     * @return Items[]
+     */
+    public static function itemList($q = null, $limit = 20)
+    {
+        if (!$q) {
+            return static::find()
+                ->limit($limit)
+                ->all();
+        }
+        return static::find()
+            ->where(['like', 'title', $q])
+            ->limit($limit)
+            ->all();
     }
 }

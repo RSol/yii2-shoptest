@@ -6,10 +6,25 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'ru',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8YSiaRwe3-XoUNmng7v43nY8KehQq8VY',
+        ],
+        'actions' => [
+            'class' => '\app\components\actions\Action',
+            'firstStop' => false,
+            'actions' => [
+                [
+                    'class' => '\app\components\actions\First',
+                    'name' => 'Первая акция',
+                ],
+                [
+                    'class' => '\app\components\actions\Second',
+                    'name' => 'Вторая акция',
+                ],
+            ],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
