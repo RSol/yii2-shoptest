@@ -3,10 +3,12 @@
 namespace app\controllers;
 
 use app\components\Card;
+use app\models\Items;
 use app\widgets\CardWidget;
 use Yii;
 use app\models\CardForm;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -80,6 +82,24 @@ class SiteController extends Controller
         return [
             'success' => true,
             'result' => CardWidget::widget(),
+        ];
+    }
+
+    public function actionList($q)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $result = ArrayHelper::map(Items::itemList($q), 'id', function ($data) {
+            /**
+             * @var $data Items
+             */
+            return [
+                'id' => $data->id,
+                'title' => $data->title,
+            ];
+        });
+        return [
+            'results' => array_values($result),
         ];
     }
 }

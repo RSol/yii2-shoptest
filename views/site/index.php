@@ -2,9 +2,9 @@
 
 use \yii\bootstrap\ActiveForm;
 use \yii\helpers\Html;
-use \yii\helpers\ArrayHelper;
-use \app\models\Items;
 use \app\assets\CardAsset;
+use \yii\web\JsExpression;
+use kartik\select2\Select2;
 
 /**
  * @var $this yii\web\View
@@ -33,15 +33,27 @@ CardAsset::register($this);
                 ?>
 
                 <div class="row">
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-5 col-md-5">
                         <?= $form->field($model, 'item')
-                            ->dropDownList(ArrayHelper::map(Items::itemList(), 'id', 'title'),
-                                [
-                                    'prompt' => 'Выберите товар',
-                                ]) ?>
+                            ->widget(Select2::classname(), [
+                                'options' => ['placeholder' => 'Выберите товар'],
+                                'pluginOptions' => [
+                                    'allowClear' => true,
+                                    'minimumInputLength' => 2,
+
+                                    'ajax' => [
+                                        'url' => ['list'],
+                                        'dataType' => 'json',
+                                        'data' => new JsExpression('function(params) { return {q:params.term}; }')
+                                    ],
+                                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                    'templateResult' => new JsExpression('function(item) { return item.title; }'),
+                                    'templateSelection' => new JsExpression('function (item) { return item.title; }'),
+                                ],
+                            ]) ?>
                     </div>
 
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-3 col-md-3">
                         <?= $form->field($model, 'count')->textInput() ?>
                     </div>
 

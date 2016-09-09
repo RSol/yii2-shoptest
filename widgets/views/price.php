@@ -1,8 +1,8 @@
 <?php if ($name): ?>
     <p>
-        Акции: <?= implode(', ', $name) ?>
+        <strong>Акции:</strong> <?= implode(', ', $name) ?>
     </p>
 <?php endif; ?>
 <p>
-    Итого: <?= $amount ?> у.е.
+    <strong>Итого:</strong> <?= $amount ?> у.е.
 </p>

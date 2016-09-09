@@ -19,7 +19,10 @@ use yii\grid\GridView;
         'dataProvider' => $dataProvider,
         'layout' => '{items}',
         'columns' => [
-            'title',
+            [
+                'attribute' => 'title',
+                'enableSorting' => false,
+            ],
             [
                 'header' => 'Количество',
                 'content' => function ($model, $key, $index, $column) use ($items) {
