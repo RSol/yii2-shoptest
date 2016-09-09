@@ -3,10 +3,17 @@ Shop test task
 
 ##Install
 
-    makedir <dirname>
+    mkdir <dirname>
     cd <dirname>
     git clone https://github.com/RSol/yii2-shoptest.git .
     composer install
+
+##Make writable directories
+
+Two directory must be writable:
+
+    web/assets
+    runtime
 
 ##Create DB
 
